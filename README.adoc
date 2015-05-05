@@ -54,15 +54,16 @@ outputDir:: specifies the directory where the output should be stored. Use `inpu
     Default: `$buildDir/asciidoc`.
 examplesDir:: specifies the directory where example snippets from spring-restdocs are located.
     Type: File, but any object convertible with `project.file` can be passed. 
-    Default: empty
+    Default: empty (not mandatory)
 descriptionsDir:: specifies the directory where hand-written descriptions are located.
     Type: File, but any object convertible with `project.file` can be passed. 
-    Default: empty
+    Default: empty (not mandatory)
 schemasDir:: specifies the directory where JSON or XML schema files are located.
     Type: File, but any object convertible with `project.file` can be passed. 
-    Default: empty
+    Default: empty (not mandatory)
 markupLanguage:: specifies the markup output format.
-    Type: MarkupLanguage. Can be MarkupLanguage.ASCIIDOC or MarkupLanguage.MARKDOWN Default: `MarkupLanguage.ASCIIDOC`
+    Type: MarkupLanguage. Can be MarkupLanguage.ASCIIDOC or MarkupLanguage.MARKDOWN 
+    Default: `MarkupLanguage.ASCIIDOC`
 
 === Example
 
