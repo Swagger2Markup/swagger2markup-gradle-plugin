@@ -68,7 +68,6 @@ convertSwagger2markup {
     examplesDir file("src/docs/asciidoc/generated")
     descriptionsDir file("src/docs/asciidoc")
     schemasDir file("src/docs/schemas")
-    markupLanguage = MarkupLanguage.MARKDOWN
 }
 ----
 
