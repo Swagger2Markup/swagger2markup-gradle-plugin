@@ -72,6 +72,58 @@ convertSwagger2markup {
 }
 ----
 
+== Demo
+
+Using the Swagger2Markup is simple. For example, you can generate your AsciiDoc or Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox] during the unit phase, copy the documentation into the Jar file and serve it as static content. That way there is no runtime overhead and there are no additional runtime library dependencies required.
+The quickest way to get started is to look at the demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with the Swagger2Markup Gradle Plugin and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
+
+=== Full configuration example
+
+ext {
+    generatedDocumentation = file("${buildDir}/asciidoc")
+}
+
+test {
+    systemProperty 'org.springframework.restdocs.outputDir', generatedDocumentation
+    systemProperty 'io.springfox.staticdocs.outputDir', generatedDocumentation
+    outputs.dir generatedDocumentation
+}
+
+convertSwagger2markup {
+    dependsOn test
+    examplesDir generatedDocumentation
+}
+
+asciidoctor {
+    dependsOn convertSwagger2markup
+    sources {
+        include 'index.adoc'
+    }
+    backends = ['html5', 'pdf']
+    attributes = [
+            doctype: 'book',
+            toc: 'left',
+            toclevels: '2',
+            numbered: '',
+            sectlinks: '',
+            sectanchors: '',
+            hardbreaks: '',
+            generated: generatedDocumentation
+    ]
+}
+
+jar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+    from ("${asciidoctor.outputDir}/pdf") {
+        into 'static/docs'
+    }
+}
+----
+
+
 == License
 
 Copyright 2015 Robert Winkler
