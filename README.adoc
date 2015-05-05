@@ -27,6 +27,7 @@ The project is published in JCenter and Maven Central.
 Add the following snippet to your Gradle build file:
 
 [source,groovy]
+[subs="attributes"]
 ----
 buildscript {
     repositories {
