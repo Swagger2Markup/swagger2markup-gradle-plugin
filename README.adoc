@@ -139,6 +139,22 @@ jar {
 }
 ----
 
+== Screenshots
+== Swagger source
+image::images/swagger_json.PNG[swagger_json]
+
+=== Generated AsciiDoc
+image::images/asciidoc.PNG[asciidoc]
+
+=== Generated Markdown
+image::images/markdown.PNG[markdown]
+
+=== Generated HTML using AsciidoctorJ
+image::images/asciidoc_html.PNG[asciidoc_html]
+
+=== Generated PDF using AsciidoctorJ
+image::images/asciidoc_pdf.PNG[asciidoc_pdf]
+
 == License
 
 Copyright 2015 Robert Winkler
