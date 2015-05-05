@@ -3,7 +3,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'net.researchgate:gradle-release:2.0.2'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
     }
@@ -11,12 +10,11 @@ buildscript {
 
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
-apply plugin: 'net.researchgate.release'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'java-gradle-plugin'
-//apply from: 'gradle/publishing.gradle'
+apply from: 'gradle/publishing.gradle'
 
 group = 'io.github.robwin'
 version = '0.1.0'
