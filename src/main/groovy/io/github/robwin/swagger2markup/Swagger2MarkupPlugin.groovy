@@ -1,29 +1,17 @@
 package io.github.robwin.swagger2markup
-import io.github.robwin.swagger2markup.extensions.RmsUploadExtension
-import io.github.robwin.swagger2markup.tasks.RmsUploadTask
+
+import io.github.robwin.swagger2markup.tasks.Swagger2MarkupTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class RmsUploadPlugin implements Plugin<Project> {
+class Swagger2MarkupPlugin implements Plugin<Project> {
 
-    private static final String EXTENSION_NAME = 'rmsUpload'
-    private static final String TASK_NAME = 'rmsUpload'
+    static final String TASK_NAME = 'convertSwagger2markup'
 
     @Override
     void apply(Project project) {
-        RmsUploadExtension extension = project.extensions.create(EXTENSION_NAME, RmsUploadExtension, project)
-        project.task(TASK_NAME, type: RmsUploadTask, group: 'Telekom',
-                description: 'Uploads an artifact to the Telekom Rollout Management System (RMS).'){RmsUploadTask task ->
-            task.conventionMapping.uploadUrl = { extension.uploadUrl }
-            task.conventionMapping.username = { extension.username }
-            task.conventionMapping.password = { extension.password }
-            task.conventionMapping.distributionsDir = { extension.distributionsDir }
-            task.conventionMapping.artifactVersion = { extension.artifactVersion }
-            task.conventionMapping.artifactDescription = { extension.artifactDescription }
-            task.conventionMapping.serviceId = { extension.serviceId }
-            task.conventionMapping.platformId = { extension.platformId }
-            task.conventionMapping.dryRun = { extension.dryRun }
-        }
+        project.task(TASK_NAME, type: Swagger2MarkupTask, group: 'Documentation',
+                description: 'Converts a Swagger JSON or YAML file into Markdown or AsciiDoc files and copies the output files to the build directory.')
     }
 
 }

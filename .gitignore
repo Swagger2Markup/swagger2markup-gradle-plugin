@@ -7,4 +7,3 @@ target
 .gradle
 build
 *.log
-src/main/bla
