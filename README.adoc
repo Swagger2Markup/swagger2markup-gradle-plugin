@@ -140,7 +140,7 @@ jar {
 ----
 
 == Screenshots
-== Swagger source
+=== Swagger source
 image::images/swagger_json.PNG[swagger_json]
 
 === Generated AsciiDoc
