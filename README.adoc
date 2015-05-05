@@ -8,7 +8,7 @@ image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/RobWin/sw
 
 == Overview
 
-The primary goal https://github.com/RobWin/swagger2markup[Swagger2Markup] is to *simplify the generation of an up-to-date RESTful API documentation by combining documentation that's been hand-written with auto-generated API documentation* produced by https://github.com/swagger-api[Swagger]. The result is intended to be an *up-to-date, easy-to-read, on- and offline user guide*, comparable to https://developer.github.com/v3/[GitHub's API documentation]. The output of the plugin can be used as an alternative to https://github.com/swagger-api/swagger-ui[swagger-ui] and can be served as static content.
+The primary goal of https://github.com/RobWin/swagger2markup[Swagger2Markup] is to *simplify the generation of an up-to-date RESTful API documentation by combining documentation that's been hand-written with auto-generated API documentation* produced by https://github.com/swagger-api[Swagger]. The result is intended to be an *up-to-date, easy-to-read, on- and offline user guide*, comparable to https://developer.github.com/v3/[GitHub's API documentation]. The output of the plugin can be used as an alternative to https://github.com/swagger-api/swagger-ui[swagger-ui] and can be served as static content.
 
 The Swagger2Markup Gradle Plugin simplifies the usage of https://github.com/RobWin/swagger2markup[Swagger2Markup] by adding a task which converts a Swagger JSON or YAML file into several *AsciiDoc* or *GitHub Flavored Markdown* documents which can be combined with hand-written documentation. The plugin supports the Swagger 1.2 and 2.0 specification. Internally the plugin uses https://github.com/RobWin/swagger2markup[Swagger2Markup] which in turn uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder].
 
@@ -75,7 +75,7 @@ convertSwagger2markup {
 == Demo
 
 Using the Swagger2Markup is simple. For example, if you are using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox], you can generate your Swagger JSON file during the unit phase, convert the Swagger file into AsciiDoc, convert AsciiDoc into HTML and PDF, copy the documentation into the Jar file and serve it as static content. That way there is no runtime overhead and there are no additional runtime library dependencies required.
-The quickest way to get started is to look at the demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with the Swagger2Markup Gradle Plugin and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
+The quickest way to get started is to look at the https://github.com/RobWin/swagger2markup[Swagger2Markup user guide] and the demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with the Swagger2Markup Gradle Plugin and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
 
 === Full configuration example
 
