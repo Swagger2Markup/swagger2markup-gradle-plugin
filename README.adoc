@@ -8,7 +8,69 @@ image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/RobWin/sw
 
 == Overview
 
+The primary goal of this project is to *simplify the generation of an up-to-date RESTful API documentation by combining documentation that's been hand-written with auto-generated API documentation* produced by https://github.com/swagger-api[Swagger]. The result is intended to be an *up-to-date, easy-to-read, on- and offline user guide*, comparable to https://developer.github.com/v3/[GitHub's API documentation]. The output of Swagger2Markup can be used as an alternative to https://github.com/swagger-api/swagger-ui[swagger-ui] and can be served as static content.
 
+Swagger2Markup converts a Swagger JSON or YAML file into several *AsciiDoc* or *GitHub Flavored Markdown* documents which can be combined with hand-written documentation. The Swagger source file can be located locally or remotely via HTTP. Swagger2Markup supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder].
+
+You can use Swagger2Markup to convert your design-first Swagger YAML file into a human-readable format and combine it with hand-written documentation. As an alternative, you can choose the implementation-first approach and use Swagger2Markup together with https://github.com/swagger-api/swagger-core/tree/master/samples/java-jersey2[Swagger JAX-RS], https://github.com/springfox/springfox[springfox] or https://github.com/spring-projects/spring-restdocs[spring-restdocs]. See usage guide below and <<integration-with-spring-restdocs, Integration with spring-restdocs>>.
+
+http://asciidoctor.org/docs/asciidoc-writers-guide/[AsciiDoc] is preferable to Markdown as it has more features. AsciiDoc is a text document format for writing documentation, articles, books, ebooks, slideshows, web pages and blogs. AsciiDoc files can be converted to *HTML*, *PDF* and *EPUB*. AsciiDoc is much better suited for describing public APIs than *JavaDoc* or *Annotations*.
+
+You can generate your HTML5, PDF and EPUB documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/aalmiray/markdown-gradle-plugin[markdown-gradle-plugin]. You can also use https://github.com/jbake-org/jbake[JBake], https://github.com/tomchristie/mkdocs[MkDocs], https://github.com/rtfd/readthedocs.org[ReadTheDocs] or https://github.com/tripit/slate[slate] to publish your AsciiDoc or Markdown documentation.
+
+The project requires at least JDK 7.
+
+== Usage
+
+The project is published in JCenter and Maven Central.
+
+Add the following snippet to your Gradle build file:
+
+[source,groovy]
+----
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'io.github.robwin:swagger2markup-gradle-plugin:{version}'
+    }
+}
+
+apply plugin: 'io.github.robwin.swagger2markup'
+----
+
+The plugin adds a new task named `convertSwagger2markup`. This task exposes a few properties as part of its configuration.
+
+.Properties
+[horizontal]
+inputDir:: specifies the directory where the swagger source is located. Use `inputDir file('src/docs/swagger')`
+    Type: File, but any object convertible with project.file can be passed. Default: src/docs/swagger.
+outputDir:: specifies the directory where the output should be stored. Use `inputDir file("${buildDir}/asciidoc")`
+    Type: File, but any object convertible with project.file can be passed. Default: $buildDir/asciidoc.
+examplesDir:: specifies the directory where example snippets from spring-restdocs are located.
+    Type: File, but any object convertible with project.file can be passed. Default: empty
+descriptionsDir:: specifies the directory where hand-written descriptions are located.
+    Type: File, but any object convertible with project.file can be passed. Default: empty
+schemasDir:: specifies the directory where JSON or XML schema files are located.
+    Type: File, but any object convertible with project.file can be passed. Default: empty
+markupLanguage:: specifies the markup output format.
+    Type: MarkupLanguage. Can be MarkupLanguage.ASCIIDOC or MarkupLanguage.MARKDOWN Default: MarkupLanguage.ASCIIDOC
+
+=== Example
+
+[source,groovy]
+----
+convertSwagger2markup {
+{
+    inputDir file('src/docs/swagger')
+    examplesDir file("${buildDir}/asciidoc")
+    descriptionsDir file("${buildDir}/asciidoc")
+    schemasDir file("${buildDir}/asciidoc")
+    markupLanguage = MarkupLanguage.MARKDOWN
+}
+----
 
 == License
 
