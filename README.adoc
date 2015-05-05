@@ -47,17 +47,17 @@ The plugin adds a new task named `convertSwagger2markup`. This task exposes a fe
 .Properties
 [horizontal]
 inputDir:: specifies the directory where the swagger source is located. Use `inputDir file('src/docs/swagger')`
-    Type: File, but any object convertible with project.file can be passed. Default: src/docs/swagger.
+    Type: File, but any object convertible with `project.file` can be passed. Default: `src/docs/swagger`.
 outputDir:: specifies the directory where the output should be stored. Use `inputDir file("${buildDir}/asciidoc")`
-    Type: File, but any object convertible with project.file can be passed. Default: $buildDir/asciidoc.
+    Type: File, but any object convertible with `project.file` can be passed. Default: `$buildDir/asciidoc`.
 examplesDir:: specifies the directory where example snippets from spring-restdocs are located.
-    Type: File, but any object convertible with project.file can be passed. Default: empty
+    Type: File, but any object convertible with `project.file` can be passed. Default: empty
 descriptionsDir:: specifies the directory where hand-written descriptions are located.
-    Type: File, but any object convertible with project.file can be passed. Default: empty
+    Type: File, but any object convertible with `project.file` can be passed. Default: empty
 schemasDir:: specifies the directory where JSON or XML schema files are located.
-    Type: File, but any object convertible with project.file can be passed. Default: empty
+    Type: File, but any object convertible with `project.file` can be passed. Default: empty
 markupLanguage:: specifies the markup output format.
-    Type: MarkupLanguage. Can be MarkupLanguage.ASCIIDOC or MarkupLanguage.MARKDOWN Default: MarkupLanguage.ASCIIDOC
+    Type: MarkupLanguage. Can be MarkupLanguage.ASCIIDOC or MarkupLanguage.MARKDOWN Default: `MarkupLanguage.ASCIIDOC`
 
 === Example
 
@@ -66,9 +66,9 @@ markupLanguage:: specifies the markup output format.
 convertSwagger2markup {
 {
     inputDir file('src/docs/swagger')
-    examplesDir file("${buildDir}/asciidoc")
-    descriptionsDir file("${buildDir}/asciidoc")
-    schemasDir file("${buildDir}/asciidoc")
+    examplesDir file("src/docs/asciidoc")
+    descriptionsDir file("src/docs/asciidoc")
+    schemasDir file("src/docs/schemas")
     markupLanguage = MarkupLanguage.MARKDOWN
 }
 ----
