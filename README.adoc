@@ -79,6 +79,8 @@ The quickest way to get started is to look at the demo project https://github.co
 
 === Full configuration example
 
+[source,groovy]
+----
 ext {
     generatedDocumentation = file("${buildDir}/asciidoc")
 }
@@ -122,7 +124,6 @@ jar {
     }
 }
 ----
-
 
 == License
 
