@@ -81,6 +81,20 @@ The quickest way to get started is to look at the https://github.com/RobWin/swag
 
 [source,groovy]
 ----
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
+        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.6'
+        classpath 'io.github.robwin:swagger2markup-gradle-plugin:0.1.0'
+    }
+}
+
+apply plugin: 'org.asciidoctor.convert'
+apply plugin: 'io.github.robwin.swagger2markup'
+
 ext {
     generatedDocumentation = file("${buildDir}/asciidoc")
 }
