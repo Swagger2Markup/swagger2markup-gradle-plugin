@@ -17,13 +17,11 @@
  *
  */
 package io.github.robwin.swagger2markup.tasks
+
 import io.github.robwin.markup.builder.MarkupLanguage
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 
 class Swagger2MarkupTask extends DefaultTask {
 
@@ -32,7 +30,7 @@ class Swagger2MarkupTask extends DefaultTask {
     def File inputDir
 
     @Optional
-    @InputDirectory
+    @OutputDirectory
     def File outputDir
 
     @Optional
