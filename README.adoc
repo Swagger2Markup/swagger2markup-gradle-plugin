@@ -114,17 +114,18 @@ apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'io.github.robwin.swagger2markup'
 
 ext {
-    generatedSwagger = file("${buildDir}/swagger")
-    generatedAsciiDoc = file("${buildDir}/asciidoc")
+    swaggerOutputDir = file("${buildDir}/swagger")
+    asciiDocOutputDir = file("${buildDir}/asciidoc")
 }
 
 test {
-    systemProperty 'io.springfox.staticdocs.outputDir', generatedSwagger
-    outputs.dir generatedSwagger
+    systemProperty 'io.springfox.staticdocs.outputDir', swaggerOutputDir
+    outputs.dir swaggerOutputDir
 }
 
 convertSwagger2markup {
     dependsOn test
+    inputDir generatedSwagger
 }
 
 asciidoctor {
@@ -141,7 +142,7 @@ asciidoctor {
             sectlinks: '',
             sectanchors: '',
             hardbreaks: '',
-            generated: generatedAsciiDoc
+            generated: asciiDocOutputDir
     ]
 }
 
