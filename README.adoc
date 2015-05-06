@@ -10,13 +10,13 @@ image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/RobWin/sw
 
 The primary goal of https://github.com/RobWin/swagger2markup[Swagger2Markup] is to *simplify the generation of an up-to-date RESTful API documentation by combining documentation that's been hand-written with auto-generated API documentation* produced by https://github.com/swagger-api[Swagger]. The result is intended to be an *up-to-date, easy-to-read, on- and offline user guide*, comparable to https://developer.github.com/v3/[GitHub's API documentation]. The output of the plugin can be used as an alternative to https://github.com/swagger-api/swagger-ui[swagger-ui] and can be served as static content.
 
-The Swagger2Markup Gradle Plugin simplifies the usage of https://github.com/RobWin/swagger2markup[Swagger2Markup] by adding a task which converts a Swagger JSON or YAML file into several *AsciiDoc* or *GitHub Flavored Markdown* documents which can be combined with hand-written documentation. The plugin supports the Swagger 1.2 and 2.0 specification. Internally the plugin uses https://github.com/RobWin/swagger2markup[Swagger2Markup] which in turn uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder].
+The Swagger2Markup Gradle Plugin simplifies the usage of https://github.com/RobWin/swagger2markup[Swagger2Markup]. The Plugin adds a Gradle task which converts a Swagger JSON or YAML file into several *AsciiDoc* or *GitHub Flavored Markdown* documents. The plugin supports the Swagger 1.2 and 2.0 specification. Internally the plugin uses https://github.com/RobWin/swagger2markup[Swagger2Markup] which in turn uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder].
 
-You can use the plugin to convert your design-first Swagger YAML file into a human-readable format and combine it with hand-written documentation. As an alternative, you can choose the implementation-first approach and use Swagger2Markup together with https://github.com/swagger-api/swagger-core/tree/master/samples/java-jersey2[Swagger JAX-RS], https://github.com/springfox/springfox[springfox] or https://github.com/spring-projects/spring-restdocs[spring-restdocs]. See https://github.com/RobWin/swagger2markup[Swagger2Markup user guide] for more details.
+You can use the plugin to convert your design-first Swagger YAML file into a human-readable format and combine it with hand-written documentation. As an alternative, you can choose the implementation-first approach and use Swagger2Markup together with https://github.com/swagger-api/swagger-core/tree/master/samples/java-jersey2[Swagger JAX-RS], https://github.com/springfox/springfox[springfox] or https://github.com/spring-projects/spring-restdocs[spring-restdocs]. See https://github.com/RobWin/swagger2markup#using-swagger2markup[Swagger2Markup user guide] for more details.
 
 http://asciidoctor.org/docs/asciidoc-writers-guide/[AsciiDoc] is preferable to Markdown as it has more features. AsciiDoc is a text document format for writing documentation, articles, books, ebooks, slideshows, web pages and blogs. AsciiDoc files can be converted to *HTML*, *PDF* and *EPUB*. AsciiDoc is much better suited for describing public APIs than *JavaDoc* or *Annotations*.
 
-You can generate your HTML5, PDF and EPUB documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/aalmiray/markdown-gradle-plugin[markdown-gradle-plugin]. You can also use https://github.com/jbake-org/jbake[JBake], https://github.com/tomchristie/mkdocs[MkDocs], https://github.com/rtfd/readthedocs.org[ReadTheDocs] or https://github.com/tripit/slate[slate] to publish your AsciiDoc or Markdown documentation.
+You can generate your HTML5, PDF and EPUB documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. You can also use https://github.com/jbake-org/jbake[JBake], https://github.com/tomchristie/mkdocs[MkDocs], https://github.com/rtfd/readthedocs.org[ReadTheDocs] or https://github.com/tripit/slate[slate] to publish your AsciiDoc or Markdown documentation.
 
 The project requires at least JDK 7.
 
@@ -49,7 +49,7 @@ The plugin adds a new task named `convertSwagger2markup`. This task exposes a fe
 inputDir:: specifies the directory where the swagger source is located. Use `inputDir file('src/docs/swagger')`
     Type: File, but any object convertible with `project.file` can be passed. 
     Default: `src/docs/swagger`.
-outputDir:: specifies the directory where the output should be stored. Use `inputDir file("${buildDir}/asciidoc")`
+outputDir:: specifies the directory where the output should be stored. Use `outputDir file("${buildDir}/asciidoc")`
     Type: File, but any object convertible with `project.file` can be passed. 
     Default: `$buildDir/asciidoc`.
 examplesDir:: specifies the directory where example snippets from spring-restdocs are located.
@@ -71,18 +71,31 @@ markupLanguage:: specifies the markup output format.
 ----
 convertSwagger2markup {
     inputDir file('src/docs/swagger')
-    examplesDir file("src/docs/asciidoc/generated")
-    descriptionsDir file("src/docs/asciidoc")
-    schemasDir file("src/docs/schemas")
+    examplesDir file('src/docs/asciidoc/generated')
+    descriptionsDir file('src/docs/asciidoc')
+    schemasDir file('src/docs/schemas')
 }
+----
+
+The configuration above would result in call to Swagger2Markup as follows:
+
+[source, java]
+----
+Swagger2MarkupConverter.from("src/docs/swagger")
+    .withExamples("src/docs/asciidoc/generated")
+    .withDescriptions("src/docs/asciidoc")
+    .withSchemas("src/docs/schemas").build()
+    .intoFolder("build/asciidoc");
 ----
 
 == Demo
 
-Using the Swagger2Markup is simple. For example, if you are using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox], you can generate your Swagger JSON file during the integration or unit test phase, convert the Swagger file into AsciiDoc, convert AsciiDoc into HTML and PDF, copy the documentation into the Jar file and serve it as static content. That way there is no runtime overhead and there are no additional runtime library dependencies required.
-The quickest way to get started is to look at the https://github.com/RobWin/swagger2markup[Swagger2Markup user guide] and the demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with the Swagger2Markup Gradle Plugin and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
+Using the Swagger2Markup is simple. For example, if you are using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox], you can generate your Swagger JSON file during the integration or unit test phase, convert the Swagger file into AsciiDoc, convert AsciiDoc into HTML and PDF, copy the documentation into the Jar file and serve it as static content. That way there is no runtime overhead and there are no additional runtime libraries required.
+The quickest way to get started is to look at the https://github.com/RobWin/swagger2markup#using-swagger2markup[Swagger2Markup user guide] and the demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with the Swagger2Markup Gradle Plugin and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
 
-=== Full configuration example
+=== Full example
+
+==== Gradle build script
 
 [source,groovy]
 ----
@@ -101,18 +114,18 @@ apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'io.github.robwin.swagger2markup'
 
 ext {
-    generatedDocumentation = file("${buildDir}/asciidoc")
+    swaggerOutputDir = file("${buildDir}/swagger")
+    asciiDocOutputDir = file("${buildDir}/asciidoc")
 }
 
 test {
-    systemProperty 'org.springframework.restdocs.outputDir', generatedDocumentation
-    systemProperty 'io.springfox.staticdocs.outputDir', generatedDocumentation
-    outputs.dir generatedDocumentation
+    systemProperty 'io.springfox.staticdocs.outputDir', swaggerOutputDir
+    outputs.dir swaggerOutputDir
 }
 
 convertSwagger2markup {
     dependsOn test
-    examplesDir generatedDocumentation
+    inputDir swaggerOutputDir
 }
 
 asciidoctor {
@@ -129,7 +142,7 @@ asciidoctor {
             sectlinks: '',
             sectanchors: '',
             hardbreaks: '',
-            generated: generatedDocumentation
+            generated: asciiDocOutputDir
     ]
 }
 
@@ -140,6 +153,37 @@ jar {
     }
     from ("${asciidoctor.outputDir}/pdf") {
         into 'static/docs'
+    }
+}
+----
+
+==== Generate Swagger JSON during an unit test with springfox-staticdocs
+
+[source,java]
+----
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
+public class Swagger2MarkupTest {
+
+    @Autowired
+    private WebApplicationContext context;
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+                .apply(new RestDocumentationConfigurer()).build();
+    }
+
+    @Test
+    public void createSwaggerJson() throws Exception {
+        String outputDir = System.getProperty("io.springfox.staticdocs.outputDir");
+        this.mockMvc.perform(get("/v2/api-docs")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(SwaggerResultHandler.outputDirectory(outputDir).build())
+                .andExpect(status().isOk());
     }
 }
 ----
