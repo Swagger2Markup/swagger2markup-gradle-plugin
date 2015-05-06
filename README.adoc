@@ -125,7 +125,7 @@ test {
 
 convertSwagger2markup {
     dependsOn test
-    inputDir generatedSwagger
+    inputDir swaggerOutputDir
 }
 
 asciidoctor {
