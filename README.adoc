@@ -77,7 +77,7 @@ convertSwagger2markup {
 }
 ----
 
-The configuration above would restult in call to Swagger2Markup:
+The configuration above would result in call to Swagger2Markup as follows:
 
 [source, java]
 ----
