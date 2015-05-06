@@ -1,6 +1,6 @@
 = Swagger2Markup Gradle Plugin
 :author: Robert Winkler
-:version: 0.1.0
+:version: 0.1.1
 :hardbreaks:
 
 image:https://travis-ci.org/RobWin/swagger2markup-gradle-plugin.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2markup-gradle-plugin"] image:https://coveralls.io/repos/RobWin/swagger2markup-gradle-plugin/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2markup-gradle-plugin"] image:https://api.bintray.com/packages/robwin/maven/swagger2markup-gradle-plugin/images/download.svg[link="https://bintray.com/robwin/maven/swagger2markup-gradle-plugin/_latestVersion"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]

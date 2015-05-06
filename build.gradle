@@ -1,12 +1,20 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.0"
     }
 }
+
+group = 'io.github.robwin'
+version = '0.1.1'
+description = 'A Swagger to Markup (AsciiDoc and Markdown) converter Gradle Plugin.'
 
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
@@ -14,13 +22,10 @@ apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'java-gradle-plugin'
+apply plugin: "com.gradle.plugin-publish"
 apply from: 'gradle/publishing.gradle'
 
-group = 'io.github.robwin'
-version = '0.1.0'
-description = 'A Swagger to Markup (AsciiDoc and Markdown) converter Gradle Plugin.'
-
-tasks.withType(JavaCompile) {
+tasks.withType(GroovyCompile) {
     sourceCompatibility = "1.7"
     targetCompatibility = "1.7"
     options.deprecation = true
@@ -67,6 +72,20 @@ tasks.coveralls {
 artifacts {
     archives sourcesJar
     archives javadocJar
+}
+
+pluginBundle {
+    website = 'https://github.com/RobWin/swagger2markup-gradle-plugin'
+    vcsUrl = 'https://github.com/RobWin/swagger2markup-gradle-plugin'
+    description = project.description
+    tags = ['swagger', 'asciidoc', 'markdown']
+
+    plugins {
+        swagger2MarkupPlugin {
+            id = 'io.github.robwin.swagger2markup'
+            displayName = 'Swagger2Markup Gradle plugin'
+        }
+    }
 }
 
 task wrapper(type: Wrapper) {

@@ -2,3 +2,6 @@
 
 == Version 0.1.0
 * Initial version
+
+== Version 0.1.1
+* Changed GroovyCompile sourceCompatibility and targetCompatibility to 1.7
