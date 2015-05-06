@@ -49,7 +49,7 @@ The plugin adds a new task named `convertSwagger2markup`. This task exposes a fe
 inputDir:: specifies the directory where the swagger source is located. Use `inputDir file('src/docs/swagger')`
     Type: File, but any object convertible with `project.file` can be passed. 
     Default: `src/docs/swagger`.
-outputDir:: specifies the directory where the output should be stored. Use `inputDir file("${buildDir}/asciidoc")`
+outputDir:: specifies the directory where the output should be stored. Use `outputDir file("${buildDir}/asciidoc")`
     Type: File, but any object convertible with `project.file` can be passed. 
     Default: `$buildDir/asciidoc`.
 examplesDir:: specifies the directory where example snippets from spring-restdocs are located.
@@ -71,15 +71,26 @@ markupLanguage:: specifies the markup output format.
 ----
 convertSwagger2markup {
     inputDir file('src/docs/swagger')
-    examplesDir file("src/docs/asciidoc/generated")
-    descriptionsDir file("src/docs/asciidoc")
-    schemasDir file("src/docs/schemas")
+    examplesDir file('src/docs/asciidoc/generated')
+    descriptionsDir file('src/docs/asciidoc')
+    schemasDir file('src/docs/schemas')
 }
+----
+
+The configuration above would restult in call to Swagger2Markup:
+
+[source, java]
+----
+Swagger2MarkupConverter.from("src/docs/swagger")
+    .withExamples("src/docs/asciidoc/generated")
+    .withDescriptions("src/docs/asciidoc")
+    .withSchemas("src/docs/schemas").build()
+    .intoFolder("build/asciidoc");
 ----
 
 == Demo
 
-Using the Swagger2Markup is simple. For example, if you are using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox], you can generate your Swagger JSON file during the integration or unit test phase, convert the Swagger file into AsciiDoc, convert AsciiDoc into HTML and PDF, copy the documentation into the Jar file and serve it as static content. That way there is no runtime overhead and there are no additional runtime library dependencies required.
+Using the Swagger2Markup is simple. For example, if you are using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox], you can generate your Swagger JSON file during the integration or unit test phase, convert the Swagger file into AsciiDoc, convert AsciiDoc into HTML and PDF, copy the documentation into the Jar file and serve it as static content. That way there is no runtime overhead and there are no additional runtime libraries required.
 The quickest way to get started is to look at the https://github.com/RobWin/swagger2markup[Swagger2Markup user guide] and the demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with the Swagger2Markup Gradle Plugin and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
 
 === Full configuration example
