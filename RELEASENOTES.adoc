@@ -5,3 +5,6 @@
 
 == Version 0.1.1
 * Changed GroovyCompile sourceCompatibility and targetCompatibility to 1.7
+
+== Version 0.1.2
+* Updated Swagger2Markup dependency from 0.5.0 to 0.5.1
