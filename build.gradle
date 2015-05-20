@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
-        classpath "com.gradle.publish:plugin-publish-plugin:0.9.0"
+        //classpath "com.gradle.publish:plugin-publish-plugin:0.9.0"
     }
 }
 
@@ -21,9 +21,8 @@ apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'java-gradle-plugin'
-apply plugin: "com.gradle.plugin-publish"
-apply from: 'gradle/publishing.gradle'
+//apply plugin: 'java-gradle-plugin'
+//apply plugin: "com.gradle.plugin-publish"
 
 tasks.withType(GroovyCompile) {
     sourceCompatibility = "1.7"
@@ -82,6 +81,7 @@ artifacts {
     archives javadocJar
 }
 
+/*
 pluginBundle {
     website = 'https://github.com/RobWin/swagger2markup-gradle-plugin'
     vcsUrl = 'https://github.com/RobWin/swagger2markup-gradle-plugin'
@@ -95,7 +95,8 @@ pluginBundle {
         }
     }
 }
+*/
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.4'
 }
