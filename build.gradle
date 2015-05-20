@@ -33,6 +33,14 @@ tasks.withType(GroovyCompile) {
     options.compilerArgs << "-Xlint:unchecked"
 }
 
+tasks.withType(JavaCompile) {
+    sourceCompatibility = "1.7"
+    targetCompatibility = "1.7"
+    options.deprecation = true
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:unchecked"
+}
+
 repositories {
     jcenter()
     mavenCentral()
