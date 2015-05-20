@@ -15,3 +15,5 @@
 == Version 0.1.4
 * Fixed compiler warning: [options] bootstrap class path not set in conjunction with -source 1.7
 
+== Version 0.1.5
+* Updated Swagger2Markup dependency from 0.5.2 to 0.5.3
