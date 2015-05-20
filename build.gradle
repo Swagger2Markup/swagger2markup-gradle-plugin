@@ -7,13 +7,13 @@ buildscript {
     }
     dependencies {
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
         //classpath "com.gradle.publish:plugin-publish-plugin:0.9.0"
     }
 }
 
 group = 'io.github.robwin'
-version = '0.1.3'
+version = '0.1.4'
 description = 'A Swagger to Markup (AsciiDoc and Markdown) converter Gradle Plugin.'
 
 apply plugin: 'groovy'
@@ -21,18 +21,11 @@ apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.jfrog.bintray'
+apply from: 'gradle/publishing.gradle'
 //apply plugin: 'java-gradle-plugin'
 //apply plugin: "com.gradle.plugin-publish"
 
 tasks.withType(GroovyCompile) {
-    sourceCompatibility = "1.7"
-    targetCompatibility = "1.7"
-    options.deprecation = true
-    options.encoding = 'UTF-8'
-    options.compilerArgs << "-Xlint:unchecked"
-}
-
-tasks.withType(JavaCompile) {
     sourceCompatibility = "1.7"
     targetCompatibility = "1.7"
     options.deprecation = true
