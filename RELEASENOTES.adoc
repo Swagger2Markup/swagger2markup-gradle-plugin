@@ -17,3 +17,6 @@
 
 == Version 0.1.5
 * Updated Swagger2Markup dependency from 0.5.2 to 0.5.3
+
+== Version 0.2.0
+* Updated Swagger2Markup dependency from 0.5.3 to 0.6.0
