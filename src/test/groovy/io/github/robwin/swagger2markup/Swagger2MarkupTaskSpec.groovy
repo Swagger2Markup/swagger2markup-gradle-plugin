@@ -20,6 +20,7 @@ package io.github.robwin.swagger2markup
 import groovy.io.FileType
 import io.github.robwin.markup.builder.MarkupLanguage
 import io.github.robwin.swagger2markup.tasks.Swagger2MarkupTask
+import org.apache.commons.io.FileUtils
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
@@ -33,10 +34,12 @@ class Swagger2MarkupTaskSpec extends Specification{
 
     def setup(){
         project = ProjectBuilder.builder().build()
+
     }
 
     def "Swagger2MarkupTask should convert Swagger to AsciiDoc"() {
         given:
+            FileUtils.deleteQuietly(new File('build/asciidoc').absoluteFile);
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
                 inputDir new File(INPUT_DIR).absoluteFile
                 outputDir new File('build/asciidoc').absoluteFile
@@ -56,6 +59,7 @@ class Swagger2MarkupTaskSpec extends Specification{
 
     def "Swagger2MarkupTask should convert Swagger to Markdown"() {
         given:
+        FileUtils.deleteQuietly(new File('build/markdown').absoluteFile);
         Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
             inputDir new File(INPUT_DIR).absoluteFile
             outputDir new File('build/markdown').absoluteFile
@@ -88,5 +92,27 @@ class Swagger2MarkupTaskSpec extends Specification{
             swagger2MarkupTask.examplesDir == new File(DOCS_DIR).absoluteFile
             swagger2MarkupTask.descriptionsDir == new File(DOCS_DIR).absoluteFile
             swagger2MarkupTask.schemasDir == new File(DOCS_DIR).absoluteFile
+    }
+
+    def "Swagger2MarkupTask should create multiple definition files"() {
+        given:
+        FileUtils.deleteQuietly(new File('build/asciidoc').absoluteFile);
+        Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
+            inputDir new File(INPUT_DIR).absoluteFile
+            outputDir new File('build/asciidoc').absoluteFile
+            separatedDefinitions true
+        }
+        when:
+        swagger2MarkupTask.convertSwagger2markup()
+        then:
+        swagger2MarkupTask != null
+        swagger2MarkupTask.inputDir == new File(INPUT_DIR).absoluteFile
+        def list = []
+        def dir = swagger2MarkupTask.outputDir
+        dir.eachFileRecurse(FileType.FILES) { file ->
+            list << file.name
+        }
+        list.sort() == ['category.adoc', 'definitions.adoc',  'order.adoc', 'overview.adoc', 'paths.adoc', 'pet.adoc', 'tag.adoc',
+                        'user.adoc']
     }
 }

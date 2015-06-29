@@ -49,6 +49,10 @@ class Swagger2MarkupTask extends DefaultTask {
     @InputDirectory
     def File schemasDir
 
+    @Optional
+    @Input
+    def boolean separatedDefinitions = false;
+
     Swagger2MarkupTask() {
         inputDir = project.file('src/docs/swagger')
         markupLanguage = MarkupLanguage.ASCIIDOC
@@ -65,6 +69,7 @@ class Swagger2MarkupTask extends DefaultTask {
             logger.debug("DescriptionsDir: {}", descriptionsDir)
             logger.debug("SchemasDir: {}", schemasDir)
             logger.debug("MarkupLanguage: {}", markupLanguage)
+            logger.debug("SeparatedDefinitions: {}", separatedDefinitions)
          }
         inputDir.eachFile { file ->
             if (logger.isDebugEnabled()) {
@@ -83,6 +88,10 @@ class Swagger2MarkupTask extends DefaultTask {
             if(schemasDir){
                 logger.debug("Include schemas is enabled.")
                 builder.withSchemas(schemasDir.absolutePath)
+            }
+            if(separatedDefinitions){
+                logger.debug("Separated definitions is enabled.")
+                builder.withSeparatedDefinitions()
             }
             builder.build().intoFolder(outputDir.absolutePath)
         }
