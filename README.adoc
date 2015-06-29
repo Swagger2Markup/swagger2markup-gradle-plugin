@@ -63,6 +63,10 @@ schemasDir:: specifies the directory where JSON or XML schema files are located.
 markupLanguage:: specifies the markup output format.
     Type: MarkupLanguage. Can be MarkupLanguage.ASCIIDOC or MarkupLanguage.MARKDOWN 
     Default: `MarkupLanguage.ASCIIDOC`
+separatedDefinitions:: specifies if a definition file per model should be generated.
+  Type: boolean
+  Default: `false`
+
 
 === Example
 
@@ -73,6 +77,7 @@ convertSwagger2markup {
     examplesDir file('src/docs/asciidoc/generated')
     descriptionsDir file('src/docs/asciidoc')
     schemasDir file('src/docs/schemas')
+    separatedDefinitions true
 }
 ----
 
@@ -83,7 +88,8 @@ The configuration above would result in call to Swagger2Markup as follows:
 Swagger2MarkupConverter.from("src/docs/swagger")
     .withExamples("src/docs/asciidoc/generated")
     .withDescriptions("src/docs/asciidoc")
-    .withSchemas("src/docs/schemas").build()
+    .withSchemas("src/docs/schemas")
+    .withSeparatedDefinitions().build()
     .intoFolder("build/asciidoc");
 ----
 
