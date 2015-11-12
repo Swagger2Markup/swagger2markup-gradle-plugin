@@ -19,6 +19,8 @@
 package io.github.robwin.swagger2markup.tasks
 
 import io.github.robwin.markup.builder.MarkupLanguage
+import io.github.robwin.swagger2markup.GroupBy
+import io.github.robwin.swagger2markup.OrderBy
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
@@ -36,6 +38,14 @@ class Swagger2MarkupTask extends DefaultTask {
     @Optional
     @Input
     MarkupLanguage markupLanguage;
+
+    @Optional
+    @Input
+    GroupBy pathsGroupedBy;
+
+    @Optional
+    @Input
+    OrderBy definitionsOrderedBy;
 
     @Optional
     @InputDirectory
@@ -65,6 +75,8 @@ class Swagger2MarkupTask extends DefaultTask {
             logger.debug("convertSwagger2markup task started")
             logger.debug("InputDir: {}", inputDir)
             logger.debug("OutputDir: {}", outputDir)
+            logger.debug("PathsGroupedBy: {}", pathsGroupedBy)
+            logger.debug("DefinitionsOrderedBy: {}", definitionsOrderedBy)
             logger.debug("ExamplesDir: {}", examplesDir)
             logger.debug("DescriptionsDir: {}", descriptionsDir)
             logger.debug("SchemasDir: {}", schemasDir)
@@ -77,6 +89,12 @@ class Swagger2MarkupTask extends DefaultTask {
             }
             Swagger2MarkupConverter.Builder builder = Swagger2MarkupConverter.from(file.absolutePath)
                     .withMarkupLanguage(markupLanguage);
+            if(pathsGroupedBy){
+                builder.withPathsGroupedBy(pathsGroupedBy)
+            }
+            if(definitionsOrderedBy){
+                builder.withDefinitionsOrderedBy(definitionsOrderedBy)
+            }
             if(examplesDir){
                 logger.debug("Include examples is enabled.")
                 builder.withExamples(examplesDir.absolutePath)
