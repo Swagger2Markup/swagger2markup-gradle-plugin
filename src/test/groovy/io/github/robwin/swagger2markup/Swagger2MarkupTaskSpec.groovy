@@ -25,6 +25,9 @@ import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
+import java.nio.file.Files
+import java.nio.file.Paths
+
 class Swagger2MarkupTaskSpec extends Specification{
 
     private static final String INPUT_DIR = 'src/test/resources/docs/swagger'
@@ -136,5 +139,20 @@ class Swagger2MarkupTaskSpec extends Specification{
             }
             list.sort() == ['category.adoc', 'definitions.adoc',  'order.adoc', 'overview.adoc', 'paths.adoc', 'pet.adoc', 'tag.adoc',
                             'user.adoc']
+    }
+
+    def "Swagger2MarkupTask should generate asciidoc with russian labels"() {
+        given:
+        FileUtils.deleteQuietly(new File('build/asciidoc').absoluteFile);
+        Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
+            inputDir new File(INPUT_DIR).absoluteFile
+            outputDir new File('build/asciidoc').absoluteFile
+            outputLanguage Language.RU
+        }
+        when:
+        swagger2MarkupTask.convertSwagger2markup()
+        then:
+        new String(Files.readAllBytes(Paths.get(new File(swagger2MarkupTask.outputDir, "definitions.adoc").toURI())))
+                .contains("== Определения")
     }
 }

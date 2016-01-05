@@ -20,6 +20,7 @@ package io.github.robwin.swagger2markup.tasks
 
 import io.github.robwin.markup.builder.MarkupLanguage
 import io.github.robwin.swagger2markup.GroupBy
+import io.github.robwin.swagger2markup.Language
 import io.github.robwin.swagger2markup.OrderBy
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter
 import org.gradle.api.DefaultTask
@@ -63,6 +64,10 @@ class Swagger2MarkupTask extends DefaultTask {
     @Input
     def boolean separatedDefinitions = false;
 
+    @Optional
+    @Input
+    Language outputLanguage
+
     Swagger2MarkupTask() {
         inputDir = project.file('src/docs/swagger')
         markupLanguage = MarkupLanguage.ASCIIDOC
@@ -82,6 +87,7 @@ class Swagger2MarkupTask extends DefaultTask {
             logger.debug("SchemasDir: {}", schemasDir)
             logger.debug("MarkupLanguage: {}", markupLanguage)
             logger.debug("SeparatedDefinitions: {}", separatedDefinitions)
+            logger.debug("OuputLanguage: {}", outputLanguage)
          }
         inputDir.eachFile { file ->
             if (logger.isDebugEnabled()) {
@@ -110,6 +116,9 @@ class Swagger2MarkupTask extends DefaultTask {
             if(separatedDefinitions){
                 logger.debug("Separated definitions is enabled.")
                 builder.withSeparatedDefinitions()
+            }
+            if(outputLanguage){
+                builder.withOutputLanguage(outputLanguage)
             }
             builder.build().intoFolder(outputDir.absolutePath)
         }
