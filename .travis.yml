@@ -1,7 +1,11 @@
 language: groovy
 jdk:
-  - oraclejdk7
+- oraclejdk7
 before_install:
- - chmod +x gradlew
+- chmod +x gradlew
 after_success:
 - ./gradlew jacocoTestReport coveralls
+env:
+  global:
+  - secure: Yqqq8LXEsyPI7SJdFG3vd+yyWBLwPxUSWRcq/MzkpLDRFh/xKP1PNm2iVwSrgsp0OBN+DfAwK8t30CI9B6bceWfX85P2XILbUPGRlCu0u0sovtTER4zMP0NiMuz+/5xgBvhBPx+zgis6l7kveH0PLfdDNkxcP/wZmx7LNnHwVc0=
+  - secure: GA6vkVcLg5VoE9NVzImhfmcHey3tfbCDbTglGhuN5/Jr1QiMcNMpHTKXZu5rQI2x+dUMOhsR6CSH8wyUOOfoqS4zqxYLf/AntDcbKW2Jcke1rAsdAXDmHvsqARkVH6fEhnryhyeLfUphLvKpiEiIJgEdB0YnVi32d4AmDQMfBkA=
