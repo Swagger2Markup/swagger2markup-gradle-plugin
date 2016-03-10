@@ -19,6 +19,7 @@
 package io.github.robwin.swagger2markup
 
 import groovy.io.FileType
+import io.github.robwin.markup.builder.MarkupLanguage
 import io.github.robwin.swagger2markup.tasks.Swagger2MarkupTask
 import org.apache.commons.io.FileUtils
 import org.gradle.api.Project
@@ -61,14 +62,14 @@ class Swagger2MarkupTaskSpec extends Specification{
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
                 inputDir new File(INPUT_DIR).absoluteFile
                 outputDir new File('build/asciidoc').absoluteFile
-                config = ['swagger2markup.markupLanguage' : 'MARKDOWN',
-                          'swagger2markup.outputLanguage' : 'EN']
+                config = ['swagger2markup.markupLanguage' : MarkupLanguage.MARKDOWN.toString(),
+                          'swagger2markup.outputLanguage' : Language.RU.toString()]
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
         then:
-            swagger2MarkupTask.config['swagger2markup.markupLanguage'] == 'MARKDOWN'
-            swagger2MarkupTask.config['swagger2markup.outputLanguage'] == 'EN'
+            swagger2MarkupTask.config['swagger2markup.markupLanguage'] == MarkupLanguage.MARKDOWN.toString()
+            swagger2MarkupTask.config['swagger2markup.outputLanguage'] == Language.RU.toString()
             !swagger2MarkupTask.config.containsKey('swagger2markup.generatedExamplesEnabled')
     }
 
@@ -78,7 +79,7 @@ class Swagger2MarkupTaskSpec extends Specification{
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
                 inputDir new File(INPUT_DIR).absoluteFile
                 outputDir new File('build/markdown').absoluteFile
-                config = ['swagger2markup.markupLanguage' : 'MARKDOWN']
+                config = ['swagger2markup.markupLanguage' : MarkupLanguage.MARKDOWN.toString()]
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
@@ -98,7 +99,7 @@ class Swagger2MarkupTaskSpec extends Specification{
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
                 inputDir new File(INPUT_DIR).absoluteFile
                 outputDir new File('build/asciidoc').absoluteFile
-                config = ['swagger2markup.outputLanguage' : 'RU']
+                config = ['swagger2markup.outputLanguage' : Language.RU.toString()]
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
@@ -113,7 +114,7 @@ class Swagger2MarkupTaskSpec extends Specification{
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
                 inputDir new File(INPUT_DIR).absoluteFile
                 outputDir new File('build/asciidoc').absoluteFile
-                config = ['swagger2markup.operationsGroupedBy' : 'TAGS']
+                config = ['swagger2markup.operationsGroupedBy' : GroupBy.TAGS.toString()]
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
