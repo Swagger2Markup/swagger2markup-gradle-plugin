@@ -5,6 +5,7 @@ before_install:
 - chmod +x gradlew
 after_success:
 - ./gradlew jacocoTestReport coveralls
+- ./gradlew artifactoryPublish -PbintrayUsername="${BINTRAY_USER}" -PbintrayApiKey="${BINTRAY_KEY}"
 env:
   global:
   - secure: Yqqq8LXEsyPI7SJdFG3vd+yyWBLwPxUSWRcq/MzkpLDRFh/xKP1PNm2iVwSrgsp0OBN+DfAwK8t30CI9B6bceWfX85P2XILbUPGRlCu0u0sovtTER4zMP0NiMuz+/5xgBvhBPx+zgis6l7kveH0PLfdDNkxcP/wZmx7LNnHwVc0=
