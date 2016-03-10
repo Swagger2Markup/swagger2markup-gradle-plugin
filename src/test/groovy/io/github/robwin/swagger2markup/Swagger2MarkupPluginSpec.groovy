@@ -33,7 +33,7 @@ class Swagger2MarkupPluginSpec extends Specification{
 
     def "Swagger2MarkupTask should be applied to project with default setup"() {
         expect:
-             project.tasks.findByName(Swagger2MarkupPlugin.TASK_NAME) == null
+            project.tasks.findByName(Swagger2MarkupPlugin.TASK_NAME) == null
         when:
             project.pluginManager.apply 'io.github.robwin.swagger2markup'
         then:

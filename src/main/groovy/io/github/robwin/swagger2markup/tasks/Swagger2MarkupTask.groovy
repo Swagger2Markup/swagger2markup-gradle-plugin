@@ -19,10 +19,9 @@
 package io.github.robwin.swagger2markup.tasks
 
 import io.github.robwin.markup.builder.MarkupLanguage
-import io.github.robwin.swagger2markup.GroupBy
-import io.github.robwin.swagger2markup.Language
-import io.github.robwin.swagger2markup.OrderBy
+import io.github.robwin.swagger2markup.Swagger2MarkupConfig
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter
+import io.github.robwin.swagger2markup.Swagger2MarkupExtensionRegistry
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
 
@@ -36,37 +35,11 @@ class Swagger2MarkupTask extends DefaultTask {
     @OutputDirectory
     def File outputDir
 
-    @Optional
-    @Input
-    MarkupLanguage markupLanguage;
+    private MarkupLanguage markupLanguage;
 
     @Optional
     @Input
-    GroupBy pathsGroupedBy;
-
-    @Optional
-    @Input
-    OrderBy definitionsOrderedBy;
-
-    @Optional
-    @InputDirectory
-    def File examplesDir
-
-    @Optional
-    @InputDirectory
-    def File descriptionsDir
-
-    @Optional
-    @InputDirectory
-    def File schemasDir
-
-    @Optional
-    @Input
-    def boolean separatedDefinitions = false;
-
-    @Optional
-    @Input
-    Language outputLanguage
+    Map<String, String> config = [:]
 
     Swagger2MarkupTask() {
         inputDir = project.file('src/docs/swagger')
@@ -80,47 +53,26 @@ class Swagger2MarkupTask extends DefaultTask {
             logger.debug("convertSwagger2markup task started")
             logger.debug("InputDir: {}", inputDir)
             logger.debug("OutputDir: {}", outputDir)
-            logger.debug("PathsGroupedBy: {}", pathsGroupedBy)
-            logger.debug("DefinitionsOrderedBy: {}", definitionsOrderedBy)
-            logger.debug("ExamplesDir: {}", examplesDir)
-            logger.debug("DescriptionsDir: {}", descriptionsDir)
-            logger.debug("SchemasDir: {}", schemasDir)
-            logger.debug("MarkupLanguage: {}", markupLanguage)
-            logger.debug("SeparatedDefinitions: {}", separatedDefinitions)
-            logger.debug("OuputLanguage: {}", outputLanguage)
+            config.each { k, v ->
+                logger.debug("k: {}", v)
+            }
          }
         inputDir.eachFile { file ->
             if (logger.isDebugEnabled()) {
                 logger.debug("File: {}", file.absolutePath)
             }
-            Swagger2MarkupConverter.Builder builder = Swagger2MarkupConverter.from(file.absolutePath)
-                    .withMarkupLanguage(markupLanguage);
-            if(pathsGroupedBy){
-                builder.withPathsGroupedBy(pathsGroupedBy)
-            }
-            if(definitionsOrderedBy){
-                builder.withDefinitionsOrderedBy(definitionsOrderedBy)
-            }
-            if(examplesDir){
-                logger.debug("Include examples is enabled.")
-                builder.withExamples(examplesDir.absolutePath)
-            }
-            if(descriptionsDir){
-                logger.debug("Include descriptions is enabled.")
-                builder.withDescriptions(descriptionsDir.absolutePath)
-            }
-            if(schemasDir){
-                logger.debug("Include schemas is enabled.")
-                builder.withSchemas(schemasDir.absolutePath)
-            }
-            if(separatedDefinitions){
-                logger.debug("Separated definitions is enabled.")
-                builder.withSeparatedDefinitions()
-            }
-            if(outputLanguage){
-                builder.withOutputLanguage(outputLanguage)
-            }
-            builder.build().intoFolder(outputDir.absolutePath)
+            Properties properties = new Properties();
+            properties.putAll(config);
+            Swagger2MarkupConfig config = Swagger2MarkupConfig.ofProperties(properties).build();
+
+            Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofDefaults().build();
+
+            Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file.toPath())
+                    .withConfig(config)
+                    .withExtensionRegistry(registry)
+                    .build();
+
+            converter.intoFolder(outputDir.toPath())
         }
         logger.debug("convertSwagger2markup task finished")
     }
