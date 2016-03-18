@@ -16,9 +16,9 @@
  *
  *
  */
-package io.github.robwin.swagger2markup
+package io.github.swagger2markup
 
-import io.github.robwin.swagger2markup.tasks.Swagger2MarkupTask
+import io.github.swagger2markup.tasks.Swagger2MarkupTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

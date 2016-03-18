@@ -13,7 +13,7 @@ buildscript {
     }
 }
 
-group = 'io.github.robwin'
+group = 'io.github.swagger2markup'
 version = '1.0.0-SNAPSHOT'
 description = 'A Swagger to Markup (AsciiDoc and Markdown) converter Gradle Plugin.'
 
@@ -45,10 +45,12 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile ("io.github.robwin:swagger2markup:1.0.0-SNAPSHOT")
+    compile ("io.github.swagger2markup:swagger2markup:1.0.0-SNAPSHOT")
+    testCompile ("io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPSHOT")
     testCompile("org.spockframework:spock-core:1.0-groovy-2.3") {
         exclude group: "org.codehaus.groovy"
     }
+    testCompile 'io.github.robwin:assertj-diff:0.1.1'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

@@ -16,9 +16,9 @@
  *
  *
  */
-package io.github.robwin.swagger2markup
+package io.github.swagger2markup
 
-import io.github.robwin.swagger2markup.tasks.Swagger2MarkupTask
+import io.github.swagger2markup.tasks.Swagger2MarkupTask
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
@@ -35,7 +35,7 @@ class Swagger2MarkupPluginSpec extends Specification{
         expect:
             project.tasks.findByName(Swagger2MarkupPlugin.TASK_NAME) == null
         when:
-            project.pluginManager.apply 'io.github.robwin.swagger2markup'
+            project.pluginManager.apply 'io.github.swagger2markup'
         then:
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.findByName(Swagger2MarkupPlugin.TASK_NAME)
             swagger2MarkupTask != null

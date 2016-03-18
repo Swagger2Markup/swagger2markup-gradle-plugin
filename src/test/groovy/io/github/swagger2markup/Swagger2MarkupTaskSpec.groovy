@@ -16,11 +16,11 @@
  *
  *
  */
-package io.github.robwin.swagger2markup
+package io.github.swagger2markup
 
 import groovy.io.FileType
-import io.github.robwin.markup.builder.MarkupLanguage
-import io.github.robwin.swagger2markup.tasks.Swagger2MarkupTask
+import io.github.swagger2markup.markup.builder.MarkupLanguage
+import io.github.swagger2markup.tasks.Swagger2MarkupTask
 import org.apache.commons.io.FileUtils
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
@@ -28,8 +28,8 @@ import spock.lang.Specification
 
 class Swagger2MarkupTaskSpec extends Specification{
 
-    private static final String INPUT_DIR = 'src/test/resources/docs/swagger'
-    private static final String DOCS_DIR = 'src/test/resources/docs'
+    private static final String INPUT_DIR = 'src/test/resources/yaml'
+    private static final String SNIPPETS_DIR = 'src/test/resources/docs/asciidoc/paths'
 
     Project project
 
@@ -79,7 +79,7 @@ class Swagger2MarkupTaskSpec extends Specification{
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
                 inputDir new File(INPUT_DIR).absoluteFile
                 outputDir new File('build/markdown').absoluteFile
-                config = ['swagger2markup.markupLanguage' : MarkupLanguage.MARKDOWN.toString()]
+                markupLanguage MarkupLanguage.MARKDOWN
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
@@ -99,7 +99,7 @@ class Swagger2MarkupTaskSpec extends Specification{
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
                 inputDir new File(INPUT_DIR).absoluteFile
                 outputDir new File('build/asciidoc').absoluteFile
-                config = ['swagger2markup.outputLanguage' : Language.RU.toString()]
+                outputLanguage Language.RU
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
@@ -114,12 +114,30 @@ class Swagger2MarkupTaskSpec extends Specification{
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
                 inputDir new File(INPUT_DIR).absoluteFile
                 outputDir new File('build/asciidoc').absoluteFile
-                config = ['swagger2markup.operationsGroupedBy' : GroupBy.TAGS.toString()]
+                pathsGroupedBy = GroupBy.TAGS
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
         then:
             String fileContents = new File(swagger2MarkupTask.outputDir, "paths.adoc").getText('UTF-8')
             fileContents.contains("=== Pet")
+    }
+
+
+    def "Swagger2MarkupTask should include Spring Restdocs snippets"() {
+        given:
+            FileUtils.deleteQuietly(new File('build/asciidoc').absoluteFile);
+            Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
+                inputDir new File(INPUT_DIR).absoluteFile
+                outputDir new File('build/asciidoc').absoluteFile
+                config = ['swagger2markup.extensions.springRestDocs.snippetBaseUri' : SNIPPETS_DIR]
+            }
+        when:
+            swagger2MarkupTask.convertSwagger2markup()
+        then:
+            String fileContents = new File(swagger2MarkupTask.outputDir, "paths.adoc").getText('UTF-8')
+            fileContents.contains("curl 'http://localhost:8080/api/pet/'")
+            fileContents.contains("POST /api/pet/ HTTP/1.1")
+            fileContents.contains("HTTP/1.1 200 OK")
     }
 }
