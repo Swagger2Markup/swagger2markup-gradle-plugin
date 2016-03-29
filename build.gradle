@@ -46,7 +46,6 @@ dependencies {
     compile gradleApi()
     compile localGroovy()
     compile ("io.github.swagger2markup:swagger2markup:1.0.0-SNAPSHOT")
-    testCompile ("io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPSHOT")
     testCompile("org.spockframework:spock-core:1.0-groovy-2.3") {
         exclude group: "org.codehaus.groovy"
     }

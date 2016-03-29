@@ -122,22 +122,4 @@ class Swagger2MarkupTaskSpec extends Specification{
             String fileContents = new File(swagger2MarkupTask.outputDir, "paths.adoc").getText('UTF-8')
             fileContents.contains("=== Pet")
     }
-
-
-    def "Swagger2MarkupTask should include Spring Restdocs snippets"() {
-        given:
-            FileUtils.deleteQuietly(new File('build/asciidoc').absoluteFile);
-            Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
-                inputDir new File(INPUT_DIR).absoluteFile
-                outputDir new File('build/asciidoc').absoluteFile
-                config = ['swagger2markup.extensions.springRestDocs.snippetBaseUri' : SNIPPETS_DIR]
-            }
-        when:
-            swagger2MarkupTask.convertSwagger2markup()
-        then:
-            String fileContents = new File(swagger2MarkupTask.outputDir, "paths.adoc").getText('UTF-8')
-            fileContents.contains("curl 'http://localhost:8080/api/pet/'")
-            fileContents.contains("POST /api/pet/ HTTP/1.1")
-            fileContents.contains("HTTP/1.1 200 OK")
-    }
 }
