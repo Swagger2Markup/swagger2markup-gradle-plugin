@@ -41,6 +41,5 @@ class Swagger2MarkupPluginSpec extends Specification{
             swagger2MarkupTask != null
             swagger2MarkupTask.group == 'Documentation'
             swagger2MarkupTask.inputDir == project.file('src/docs/swagger')
-            swagger2MarkupTask.outputDir == new File(project.buildDir, 'asciidoc')
     }
 }

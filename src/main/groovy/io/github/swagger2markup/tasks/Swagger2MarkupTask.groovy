@@ -18,8 +18,7 @@
  */
 package io.github.swagger2markup.tasks
 
-import io.github.swagger2markup.GroupBy
-import io.github.swagger2markup.Language
+import io.github.swagger2markup.Swagger2MarkupConfig
 import io.github.swagger2markup.Swagger2MarkupConverter
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder
 import io.github.swagger2markup.markup.builder.MarkupLanguage
@@ -38,18 +37,6 @@ class Swagger2MarkupTask extends DefaultTask {
     String swaggerFile;
 
     @Optional
-    @Input
-    MarkupLanguage markupLanguage;
-
-    @Optional
-    @Input
-    GroupBy pathsGroupedBy;
-
-    @Optional
-    @Input
-    Language outputLanguage
-
-    @Optional
     @OutputDirectory
     def File outputDir
 
@@ -59,52 +46,43 @@ class Swagger2MarkupTask extends DefaultTask {
 
     Swagger2MarkupTask() {
         inputDir = project.file('src/docs/swagger')
-        markupLanguage = MarkupLanguage.ASCIIDOC
-        outputDir = new File(project.buildDir, markupLanguage.toString().toLowerCase())
     }
 
     @TaskAction
     void convertSwagger2markup() {
+        Swagger2MarkupConfig swagger2MarkupConfig = new Swagger2MarkupConfigBuilder(config).build()
+        MarkupLanguage markupLanguage = swagger2MarkupConfig.getMarkupLanguage()
+        outputDir = new File(project.buildDir, markupLanguage.toString().toLowerCase())
+
         if (logger.isDebugEnabled()) {
             logger.debug("convertSwagger2markup task started")
             logger.debug("InputDir: {}", inputDir)
             logger.debug("OutputDir: {}", outputDir)
             logger.debug("SwaggerFile: {}", swaggerFile)
-            logger.debug("MarkupLanguage: {}", markupLanguage)
-            logger.debug("OutputLanguage: {}", outputLanguage)
             config.each { k, v ->
                 logger.debug("k: {}", v)
             }
-         }
+        }
 
         if (StringUtils.isEmpty(swaggerFile)) {
             inputDir.eachFile { file ->
                 if(!file.isHidden()) {
-                    convertSwaggerFileToMarkup(file)
+                    convertSwaggerFileToMarkup(swagger2MarkupConfig, file)
                 }
             }
         } else {
-            convertSwaggerFileToMarkup(new File(inputDir, swaggerFile));
+            convertSwaggerFileToMarkup(swagger2MarkupConfig, new File(inputDir, swaggerFile));
         }
 
         logger.debug("convertSwagger2markup task finished")
     }
 
-    void convertSwaggerFileToMarkup(File file) {
+    void convertSwaggerFileToMarkup(Swagger2MarkupConfig swagger2MarkupConfig, File file) {
         if (logger.isDebugEnabled()) {
             logger.debug("File: {}", file.absolutePath)
         }
-        Swagger2MarkupConfigBuilder configBuilder = new Swagger2MarkupConfigBuilder(config)
-                .withMarkupLanguage(markupLanguage);
-        if(outputLanguage){
-            configBuilder.withOutputLanguage(outputLanguage)
-        }
-        if(pathsGroupedBy){
-            configBuilder.withPathsGroupedBy(pathsGroupedBy)
-        }
-
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file.toPath())
-                .withConfig(configBuilder.build())
+                .withConfig(swagger2MarkupConfig)
                 .build();
 
         converter.toFolder(outputDir.toPath())
