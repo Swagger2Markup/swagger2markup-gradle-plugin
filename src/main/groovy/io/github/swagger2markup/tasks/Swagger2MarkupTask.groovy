@@ -21,13 +21,8 @@ package io.github.swagger2markup.tasks
 import io.github.swagger2markup.Swagger2MarkupConfig
 import io.github.swagger2markup.Swagger2MarkupConverter
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder
-import io.github.swagger2markup.markup.builder.MarkupLanguage
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.OutputDirectory
-import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 
 class Swagger2MarkupTask extends DefaultTask {
 
@@ -54,13 +49,12 @@ class Swagger2MarkupTask extends DefaultTask {
     @TaskAction
     void convertSwagger2markup() {
         Swagger2MarkupConfig swagger2MarkupConfig = new Swagger2MarkupConfigBuilder(config).build()
-        MarkupLanguage markupLanguage = swagger2MarkupConfig.getMarkupLanguage()
-        outputDir = new File(project.buildDir, markupLanguage.toString().toLowerCase())
 
         if (logger.isDebugEnabled()) {
             logger.debug("convertSwagger2markup task started")
             logger.debug("Input: {}", input)
             logger.debug("OutputDir: {}", outputDir)
+            logger.debug("OutputFile: {}", outputFile)
             config.each { k, v ->
                 logger.debug("k: {}", v)
             }
