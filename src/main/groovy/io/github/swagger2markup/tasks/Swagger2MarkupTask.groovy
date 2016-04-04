@@ -21,6 +21,7 @@ package io.github.swagger2markup.tasks
 import io.github.swagger2markup.Swagger2MarkupConfig
 import io.github.swagger2markup.Swagger2MarkupConverter
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder
+import io.github.swagger2markup.markup.builder.MarkupLanguage
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
 
@@ -49,6 +50,7 @@ class Swagger2MarkupTask extends DefaultTask {
     @TaskAction
     void convertSwagger2markup() {
         Swagger2MarkupConfig swagger2MarkupConfig = new Swagger2MarkupConfigBuilder(config).build()
+        MarkupLanguage markupLanguage = swagger2MarkupConfig.getMarkupLanguage();
 
         if (logger.isDebugEnabled()) {
             logger.debug("convertSwagger2markup task started")
@@ -63,17 +65,17 @@ class Swagger2MarkupTask extends DefaultTask {
         if (input.isDirectory()) {
             input.eachFile { file ->
                 if(!file.isHidden()) {
-                    convertSwaggerFileToMarkup(swagger2MarkupConfig, file)
+                    convertSwaggerFileToMarkup(markupLanguage, swagger2MarkupConfig, file)
                 }
             }
         } else {
-            convertSwaggerFileToMarkup(swagger2MarkupConfig, input);
+            convertSwaggerFileToMarkup(markupLanguage, swagger2MarkupConfig, input);
         }
 
         logger.debug("convertSwagger2markup task finished")
     }
 
-    void convertSwaggerFileToMarkup(Swagger2MarkupConfig swagger2MarkupConfig, File file) {
+    void convertSwaggerFileToMarkup(markupLanguage, Swagger2MarkupConfig swagger2MarkupConfig, File file) {
         if (logger.isDebugEnabled()) {
             logger.debug("File: {}", file.absolutePath)
         }
@@ -81,10 +83,13 @@ class Swagger2MarkupTask extends DefaultTask {
                 .withConfig(swagger2MarkupConfig)
                 .build();
 
-        if(outputDir)
-            converter.toFolder(outputDir.toPath())
-
         if(outputFile)
             converter.toFile(outputFile.toPath())
+
+        if(outputDir) {
+            converter.toFolder(outputDir.toPath())
+        }else{
+            new File(project.buildDir, markupLanguage.toString().toLowerCase())
+        }
     }
 }
