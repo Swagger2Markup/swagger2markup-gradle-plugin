@@ -22,30 +22,33 @@ import io.github.swagger2markup.Swagger2MarkupConfig
 import io.github.swagger2markup.Swagger2MarkupConverter
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder
 import io.github.swagger2markup.markup.builder.MarkupLanguage
-import org.apache.commons.lang3.StringUtils
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.*
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.TaskAction
 
 class Swagger2MarkupTask extends DefaultTask {
 
     @Optional
-    @InputDirectory
-    def File inputDir
-
-    @Optional
     @Input
-    String swaggerFile;
+    def File input
 
     @Optional
     @OutputDirectory
     def File outputDir
 
     @Optional
+    @OutputFile
+    def File outputFile
+
+    @Optional
     @Input
     Map<String, String> config = [:]
 
     Swagger2MarkupTask() {
-        inputDir = project.file('src/docs/swagger')
+        input = project.file('src/docs/swagger')
     }
 
     @TaskAction
@@ -56,22 +59,21 @@ class Swagger2MarkupTask extends DefaultTask {
 
         if (logger.isDebugEnabled()) {
             logger.debug("convertSwagger2markup task started")
-            logger.debug("InputDir: {}", inputDir)
+            logger.debug("Input: {}", input)
             logger.debug("OutputDir: {}", outputDir)
-            logger.debug("SwaggerFile: {}", swaggerFile)
             config.each { k, v ->
                 logger.debug("k: {}", v)
             }
         }
 
-        if (StringUtils.isEmpty(swaggerFile)) {
-            inputDir.eachFile { file ->
+        if (input.isDirectory()) {
+            input.eachFile { file ->
                 if(!file.isHidden()) {
                     convertSwaggerFileToMarkup(swagger2MarkupConfig, file)
                 }
             }
         } else {
-            convertSwaggerFileToMarkup(swagger2MarkupConfig, new File(inputDir, swaggerFile));
+            convertSwaggerFileToMarkup(swagger2MarkupConfig, input);
         }
 
         logger.debug("convertSwagger2markup task finished")
@@ -85,6 +87,10 @@ class Swagger2MarkupTask extends DefaultTask {
                 .withConfig(swagger2MarkupConfig)
                 .build();
 
-        converter.toFolder(outputDir.toPath())
+        if(outputDir)
+            converter.toFolder(outputDir.toPath())
+
+        if(outputFile)
+            converter.toFile(outputFile.toPath())
     }
 }
