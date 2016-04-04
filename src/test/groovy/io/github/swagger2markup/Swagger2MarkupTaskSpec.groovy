@@ -42,16 +42,16 @@ class Swagger2MarkupTaskSpec extends Specification{
         given:
             FileUtils.deleteQuietly(new File('build/asciidoc').absoluteFile);
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
-                input new File(INPUT_DIR).absoluteFile
-                outputDir new File('build/asciidoc').absoluteFile
+                swaggerInput new File(INPUT_DIR).absoluteFile
+                markupOutputDir new File('build/asciidoc').absoluteFile
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
         then:
             swagger2MarkupTask != null
-            swagger2MarkupTask.input == new File(INPUT_DIR).absoluteFile
+            swagger2MarkupTask.swaggerInput == new File(INPUT_DIR).absoluteFile
             def list = []
-            def dir = swagger2MarkupTask.outputDir
+            def dir = swagger2MarkupTask.markupOutputDir
             dir.eachFileRecurse(FileType.FILES) { file ->
                 list << file.name
             }
@@ -63,17 +63,17 @@ class Swagger2MarkupTaskSpec extends Specification{
         given:
             FileUtils.deleteQuietly(new File('build/markdown').absoluteFile);
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
-                input new File(INPUT_DIR).absoluteFile
-                outputDir new File('build/markdown').absoluteFile
+                swaggerInput new File(INPUT_DIR).absoluteFile
+                markupOutputDir new File('build/markdown').absoluteFile
                 config = [(Swagger2MarkupProperties.MARKUP_LANGUAGE) : MarkupLanguage.MARKDOWN.toString()]
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
         then:
             swagger2MarkupTask != null
-            swagger2MarkupTask.input == new File(INPUT_DIR).absoluteFile
+            swagger2MarkupTask.swaggerInput == new File(INPUT_DIR).absoluteFile
             def list = []
-            def dir = swagger2MarkupTask.outputDir
+            def dir = swagger2MarkupTask.markupOutputDir
             dir.eachFileRecurse(FileType.FILES) { file ->
                 list << file.name
             }
@@ -84,17 +84,17 @@ class Swagger2MarkupTaskSpec extends Specification{
         given:
             FileUtils.deleteQuietly(new File('build/markdown').absoluteFile);
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
-                input new File(INPUT_DIR, "swagger_petstore.yaml").absoluteFile
-                outputDir new File('build/markdown').absoluteFile
+                swaggerInput new File(INPUT_DIR, "swagger_petstore.yaml").absoluteFile
+                markupOutputDir new File('build/markdown').absoluteFile
                 config = [(Swagger2MarkupProperties.MARKUP_LANGUAGE) : MarkupLanguage.MARKDOWN.toString()]
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
         then:
             swagger2MarkupTask != null
-            swagger2MarkupTask.input == new File(INPUT_DIR, "swagger_petstore.yaml").absoluteFile
+            swagger2MarkupTask.swaggerInput == new File(INPUT_DIR, "swagger_petstore.yaml").absoluteFile
             def list = []
-            def dir = swagger2MarkupTask.outputDir
+            def dir = swagger2MarkupTask.markupOutputDir
             dir.eachFileRecurse(FileType.FILES) { file ->
                 list << file.name
             }
@@ -105,15 +105,15 @@ class Swagger2MarkupTaskSpec extends Specification{
         given:
             FileUtils.deleteQuietly(new File('build/markdown').absoluteFile);
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
-                input new File(INPUT_DIR, "swagger_petstore.yaml").absoluteFile
-                outputFile new File('build/markdown', "swagger").absoluteFile
+                swaggerInput new File(INPUT_DIR, "swagger_petstore.yaml").absoluteFile
+                markupOutputFile new File('build/markdown', "swagger").absoluteFile
                 config = [(Swagger2MarkupProperties.MARKUP_LANGUAGE) : MarkupLanguage.MARKDOWN.toString()]
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
         then:
         swagger2MarkupTask != null
-            swagger2MarkupTask.input == new File(INPUT_DIR, "swagger_petstore.yaml").absoluteFile
+            swagger2MarkupTask.swaggerInput == new File(INPUT_DIR, "swagger_petstore.yaml").absoluteFile
             def list = []
             def dir = new File('build/markdown')
             dir.eachFileRecurse(FileType.FILES) { file ->
@@ -127,15 +127,15 @@ class Swagger2MarkupTaskSpec extends Specification{
         given:
             FileUtils.deleteQuietly(new File('build/markdown').absoluteFile);
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
-                input new File(INPUT_DIR).absoluteFile
-                outputDir new File('build/markdown').absoluteFile
+                swaggerInput new File(INPUT_DIR).absoluteFile
+                markupOutputDir new File('build/markdown').absoluteFile
                 config = [(Swagger2MarkupProperties.MARKUP_LANGUAGE) : MarkupLanguage.MARKDOWN.toString(),
                           (Swagger2MarkupProperties.OUTPUT_LANGUAGE) : Language.RU.toString()]
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
         then:
-            String fileContents = new File(swagger2MarkupTask.outputDir, "definitions.md").getText('UTF-8')
+            String fileContents = new File(swagger2MarkupTask.markupOutputDir, "definitions.md").getText('UTF-8')
             fileContents.contains("## Определения")
     }
 
@@ -143,15 +143,15 @@ class Swagger2MarkupTaskSpec extends Specification{
         given:
             FileUtils.deleteQuietly(new File('build/markdown').absoluteFile);
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
-                input new File(INPUT_DIR).absoluteFile
-                outputDir new File('build/markdown').absoluteFile
+                swaggerInput new File(INPUT_DIR).absoluteFile
+                markupOutputDir new File('build/markdown').absoluteFile
                 config = [(Swagger2MarkupProperties.MARKUP_LANGUAGE) : MarkupLanguage.MARKDOWN.toString(),
                           (Swagger2MarkupProperties.PATHS_GROUPED_BY) : GroupBy.TAGS.toString()]
             }
         when:
             swagger2MarkupTask.convertSwagger2markup()
         then:
-            String fileContents = new File(swagger2MarkupTask.outputDir, "paths.md").getText('UTF-8')
+            String fileContents = new File(swagger2MarkupTask.markupOutputDir, "paths.md").getText('UTF-8')
             fileContents.contains("### Pet")
     }
 }

@@ -29,22 +29,22 @@ class Swagger2MarkupTask extends DefaultTask {
 
     @Optional
     @Input
-    def File input
+    def File swaggerInput
 
     @Optional
     @OutputDirectory
-    def File outputDir
+    def File markupOutputDir
 
     @Optional
     @OutputFile
-    def File outputFile
+    def File markupOutputFile
 
     @Optional
     @Input
     Map<String, String> config = [:]
 
     Swagger2MarkupTask() {
-        input = project.file('src/docs/swagger')
+        swaggerInput = project.file('src/docs/swagger')
     }
 
     @TaskAction
@@ -54,22 +54,22 @@ class Swagger2MarkupTask extends DefaultTask {
 
         if (logger.isDebugEnabled()) {
             logger.debug("convertSwagger2markup task started")
-            logger.debug("Input: {}", input)
-            logger.debug("OutputDir: {}", outputDir)
-            logger.debug("OutputFile: {}", outputFile)
+            logger.debug("Input: {}", swaggerInput)
+            logger.debug("OutputDir: {}", markupOutputDir)
+            logger.debug("OutputFile: {}", markupOutputFile)
             config.each { k, v ->
                 logger.debug("k: {}", v)
             }
         }
 
-        if (input.isDirectory()) {
-            input.eachFile { file ->
+        if (swaggerInput.isDirectory()) {
+            swaggerInput.eachFile { file ->
                 if(!file.isHidden()) {
                     convertSwaggerFileToMarkup(markupLanguage, swagger2MarkupConfig, file)
                 }
             }
         } else {
-            convertSwaggerFileToMarkup(markupLanguage, swagger2MarkupConfig, input);
+            convertSwaggerFileToMarkup(markupLanguage, swagger2MarkupConfig, swaggerInput);
         }
 
         logger.debug("convertSwagger2markup task finished")
@@ -83,11 +83,11 @@ class Swagger2MarkupTask extends DefaultTask {
                 .withConfig(swagger2MarkupConfig)
                 .build();
 
-        if(outputFile)
-            converter.toFile(outputFile.toPath())
+        if(markupOutputFile)
+            converter.toFile(markupOutputFile.toPath())
 
-        if(outputDir) {
-            converter.toFolder(outputDir.toPath())
+        if(markupOutputDir) {
+            converter.toFolder(markupOutputDir.toPath())
         }else{
             new File(project.buildDir, markupLanguage.toString().toLowerCase())
         }
