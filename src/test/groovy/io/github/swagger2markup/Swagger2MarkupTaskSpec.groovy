@@ -19,7 +19,6 @@
 package io.github.swagger2markup
 
 import groovy.io.FileType
-import io.github.swagger2markup.builder.Swagger2MarkupProperties
 import io.github.swagger2markup.markup.builder.MarkupLanguage
 import io.github.swagger2markup.tasks.Swagger2MarkupTask
 import org.apache.commons.io.FileUtils
