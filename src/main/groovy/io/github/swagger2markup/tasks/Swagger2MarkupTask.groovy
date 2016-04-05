@@ -30,7 +30,7 @@ class Swagger2MarkupTask extends DefaultTask {
 
     @Optional
     @Input
-    def String input
+    def String swaggerInput
 
     @Optional
     @OutputDirectory
@@ -51,7 +51,7 @@ class Swagger2MarkupTask extends DefaultTask {
     void convertSwagger2markup() {
         if (logger.isDebugEnabled()) {
             logger.debug("convertSwagger2markup task started")
-            logger.debug("Input: {}", input)
+            logger.debug("Input: {}", swaggerInput)
             logger.debug("OutputDir: {}", outputDir)
             logger.debug("OutputFile: {}", outputFile)
             config.each { k, v ->
@@ -60,7 +60,7 @@ class Swagger2MarkupTask extends DefaultTask {
         }
         try{
             Swagger2MarkupConfig swagger2MarkupConfig = new Swagger2MarkupConfigBuilder(config).build();
-            Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(URIUtils.create(input))
+            Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(URIUtils.create(swaggerInput))
                     .withConfig(swagger2MarkupConfig).build();
 
             if(outputFile != null){
