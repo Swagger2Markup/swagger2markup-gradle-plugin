@@ -21,75 +21,58 @@ package io.github.swagger2markup.tasks
 import io.github.swagger2markup.Swagger2MarkupConfig
 import io.github.swagger2markup.Swagger2MarkupConverter
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder
-import io.github.swagger2markup.markup.builder.MarkupLanguage
+import io.github.swagger2markup.utils.URIUtils
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.*
 
 class Swagger2MarkupTask extends DefaultTask {
 
     @Optional
     @Input
-    def File swaggerInput
+    def String input
 
     @Optional
     @OutputDirectory
-    def File markupOutputDir
+    def File outputDir
 
     @Optional
     @OutputFile
-    def File markupOutputFile
+    def File outputFile
 
     @Optional
     @Input
     Map<String, String> config = [:]
 
     Swagger2MarkupTask() {
-        swaggerInput = project.file('src/docs/swagger')
     }
 
     @TaskAction
     void convertSwagger2markup() {
-        Swagger2MarkupConfig swagger2MarkupConfig = new Swagger2MarkupConfigBuilder(config).build()
-        MarkupLanguage markupLanguage = swagger2MarkupConfig.getMarkupLanguage();
-
         if (logger.isDebugEnabled()) {
             logger.debug("convertSwagger2markup task started")
-            logger.debug("Input: {}", swaggerInput)
-            logger.debug("OutputDir: {}", markupOutputDir)
-            logger.debug("OutputFile: {}", markupOutputFile)
+            logger.debug("Input: {}", input)
+            logger.debug("OutputDir: {}", outputDir)
+            logger.debug("OutputFile: {}", outputFile)
             config.each { k, v ->
                 logger.debug("k: {}", v)
             }
         }
+        try{
+            Swagger2MarkupConfig swagger2MarkupConfig = new Swagger2MarkupConfigBuilder(config).build();
+            Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(URIUtils.create(input))
+                    .withConfig(swagger2MarkupConfig).build();
 
-        if (swaggerInput.isDirectory()) {
-            swaggerInput.eachFile { file ->
-                if(!file.isHidden()) {
-                    convertSwaggerFileToMarkup(markupLanguage, swagger2MarkupConfig, file)
-                }
+            if(outputFile != null){
+                converter.toFile(outputFile.toPath());
+            }else if (outputDir != null){
+                converter.toFolder(outputDir.toPath());
+            }else {
+                throw new IllegalArgumentException("Either outputFile or outputDir parameter must be used");
             }
-        } else {
-            convertSwaggerFileToMarkup(markupLanguage, swagger2MarkupConfig, swaggerInput);
+        }catch (Exception e){
+            throw new GradleException("Failed to execute task 'convertSwagger2markup'", e);
         }
-
         logger.debug("convertSwagger2markup task finished")
-    }
-
-    void convertSwaggerFileToMarkup(markupLanguage, Swagger2MarkupConfig swagger2MarkupConfig, File file) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("File: {}", file.absolutePath)
-        }
-        Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file.toPath())
-                .withConfig(swagger2MarkupConfig)
-                .build();
-
-        if(markupOutputFile)
-            converter.toFile(markupOutputFile.toPath())
-
-        if(markupOutputDir) {
-            converter.toFolder(markupOutputDir.toPath())
-        }else{
-            new File(project.buildDir, markupLanguage.toString().toLowerCase())
-        }
     }
 }

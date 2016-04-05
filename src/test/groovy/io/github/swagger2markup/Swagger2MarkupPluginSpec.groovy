@@ -40,6 +40,5 @@ class Swagger2MarkupPluginSpec extends Specification{
             Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.findByName(Swagger2MarkupPlugin.TASK_NAME)
             swagger2MarkupTask != null
             swagger2MarkupTask.group == 'Documentation'
-            swagger2MarkupTask.swaggerInput == project.file('src/docs/swagger')
     }
 }
