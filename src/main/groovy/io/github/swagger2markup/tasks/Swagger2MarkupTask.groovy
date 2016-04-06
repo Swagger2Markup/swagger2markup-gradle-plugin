@@ -28,7 +28,6 @@ import org.gradle.api.tasks.*
 
 class Swagger2MarkupTask extends DefaultTask {
 
-    @Optional
     @Input
     def String swaggerInput
 
