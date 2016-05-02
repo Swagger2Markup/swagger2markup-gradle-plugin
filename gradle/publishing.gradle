@@ -36,8 +36,9 @@ bintray {
     publish = true //If version should be auto published after an upload
     publications = ['mavenJava']
     pkg {
-        repo = 'maven'
+        repo = 'Maven'
         name = 'swagger2markup-gradle-plugin'
+        userOrg = 'swagger2markup'
         websiteUrl = 'https://github.com/Swagger2Markup/swagger2markup-gradle-plugin'
         issueTrackerUrl = 'https://github.com/Swagger2Markup/swagger2markup-gradle-plugin/issues'
         vcsUrl = 'https://github.com/Swagger2Markup/swagger2markup-gradle-plugin.git'
