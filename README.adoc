@@ -6,7 +6,7 @@ image:https://travis-ci.org/Swagger2Markup/swagger2markup-gradle-plugin.svg?bran
 
 == Reference documentation
 
-The documentation can be found at http://swagger2markup.github.io/swagger2markup/1.0.1/[Reference documentation]
+The documentation can be found at http://swagger2markup.github.io/swagger2markup/1.1.0/[Reference documentation]
 
 == License
 
