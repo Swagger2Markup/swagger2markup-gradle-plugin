@@ -98,6 +98,10 @@ tasks.coveralls {
     dependsOn 'check'
 }
 
+test.doFirst {
+    classpath = classpath.filter { !it.name.contains("snakeyaml-1.6") }
+}
+
 artifacts {
     archives sourcesJar
     archives javadocJar
