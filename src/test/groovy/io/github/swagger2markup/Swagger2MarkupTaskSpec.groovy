@@ -29,6 +29,7 @@ import spock.lang.Specification
 class Swagger2MarkupTaskSpec extends Specification{
 
     private static final String INPUT_DIR = 'src/test/resources/yaml'
+    private static final String JSON_INPUT_DIR = 'src/test/resources/json'
     public static final String markdownOuputDir = 'build/markdown'
     public static final String asciidocOutputDir = 'build/asciidoc'
 
@@ -119,6 +120,46 @@ class Swagger2MarkupTaskSpec extends Specification{
                 list << file.name
             }
             list.sort() == ['swagger.md']
+    }
+
+    def "Swagger2MarkupTask should convert Swagger json file to a file"() {
+        given:
+        FileUtils.deleteQuietly(new File(markdownOuputDir).absoluteFile);
+        Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
+            swaggerInput new File(JSON_INPUT_DIR, "swagger_petstore.json").absolutePath
+            outputFile new File(markdownOuputDir, "swagger").absoluteFile
+            config = [(Swagger2MarkupProperties.MARKUP_LANGUAGE) : MarkupLanguage.MARKDOWN.toString()]
+        }
+        when:
+        swagger2MarkupTask.convertSwagger2markup()
+        then:
+        swagger2MarkupTask != null
+        def list = []
+        def dir = new File(markdownOuputDir)
+        dir.eachFileRecurse(FileType.FILES) { file ->
+            list << file.name
+        }
+        list.sort() == ['swagger.md']
+    }
+
+    def "Swagger2MarkupTask should convert Swagger json file to a file using swaggerInputFile"() {
+        given:
+        FileUtils.deleteQuietly(new File(markdownOuputDir).absoluteFile);
+        Swagger2MarkupTask swagger2MarkupTask = (Swagger2MarkupTask) project.tasks.create(name: Swagger2MarkupPlugin.TASK_NAME, type: Swagger2MarkupTask) {
+            swaggerInputFile new File(JSON_INPUT_DIR, "swagger_petstore.json")
+            outputFile new File(markdownOuputDir, "swagger").absoluteFile
+            config = [(Swagger2MarkupProperties.MARKUP_LANGUAGE) : MarkupLanguage.MARKDOWN.toString()]
+        }
+        when:
+        swagger2MarkupTask.convertSwagger2markup()
+        then:
+        swagger2MarkupTask != null
+        def list = []
+        def dir = new File(markdownOuputDir)
+        dir.eachFileRecurse(FileType.FILES) { file ->
+            list << file.name
+        }
+        list.sort() == ['swagger.md']
     }
 
     def "Swagger2MarkupTask should convert Swagger URL to a file"() {

@@ -24,6 +24,7 @@ apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: "com.jfrog.artifactory"
 apply from: 'gradle/publishing.gradle'
+apply plugin: 'java-gradle-plugin'
 //apply plugin: 'java-gradle-plugin'
 //apply plugin: "com.gradle.plugin-publish"
 

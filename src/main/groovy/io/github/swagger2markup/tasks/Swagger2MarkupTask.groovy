@@ -28,7 +28,12 @@ import org.gradle.api.tasks.*
 
 class Swagger2MarkupTask extends DefaultTask {
 
+    @InputFile
+    @Optional
+    def File swaggerInputFile
+
     @Input
+    @Optional
     def String swaggerInput
 
     @Optional
@@ -57,20 +62,26 @@ class Swagger2MarkupTask extends DefaultTask {
                 logger.debug("k: {}", v)
             }
         }
-        try{
-            Swagger2MarkupConfig swagger2MarkupConfig = new Swagger2MarkupConfigBuilder(config).build();
-            Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(URIUtils.create(swaggerInput))
-                    .withConfig(swagger2MarkupConfig).build();
-
-            if(outputFile != null){
-                converter.toFile(outputFile.toPath());
-            }else if (outputDir != null){
-                converter.toFolder(outputDir.toPath());
-            }else {
-                throw new IllegalArgumentException("Either outputFile or outputDir parameter must be used");
+        try {
+            if (swaggerInputFile == null && swaggerInput == null) {
+                throw new IllegalArgumentException("Either swaggerInputFile or swaggerInputUrl parameter must be used")
             }
-        }catch (Exception e){
-            throw new GradleException("Failed to execute task 'convertSwagger2markup'", e);
+            Swagger2MarkupConfig swagger2MarkupConfig = new Swagger2MarkupConfigBuilder(config).build()
+            Swagger2MarkupConverter.Builder converterBuilder = swaggerInput != null ?
+                    Swagger2MarkupConverter.from(URIUtils.create(swaggerInput))
+                    : Swagger2MarkupConverter.from(swaggerInputFile.toPath())
+
+            Swagger2MarkupConverter converter = converterBuilder.withConfig(swagger2MarkupConfig).build()
+
+            if (outputFile != null) {
+                converter.toFile(outputFile.toPath())
+            } else if (outputDir != null) {
+                converter.toFolder(outputDir.toPath())
+            } else {
+                throw new IllegalArgumentException("Either outputFile or outputDir parameter must be used")
+            }
+        } catch (Exception e) {
+            throw new GradleException("Failed to execute task 'convertSwagger2markup'", e)
         }
         logger.debug("convertSwagger2markup task finished")
     }
