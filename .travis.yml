@@ -2,7 +2,7 @@ language: groovy
 os: linux
 dist: xenial
 jdk:
-- oraclejdk8
+- openjdk8
 before_install:
 - chmod +x gradlew
 after_success:
