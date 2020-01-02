@@ -9,8 +9,12 @@ buildscript {
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
-        //classpath "com.gradle.publish:plugin-publish-plugin:0.9.0"
     }
+}
+
+plugins {
+    id("java-gradle-plugin")
+    id("com.gradle.plugin-publish") version "0.10.1"
 }
 
 group = 'io.github.swagger2markup'
@@ -23,10 +27,6 @@ apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: "com.jfrog.artifactory"
-apply from: 'gradle/publishing.gradle'
-apply plugin: 'java-gradle-plugin'
-//apply plugin: 'java-gradle-plugin'
-//apply plugin: "com.gradle.plugin-publish"
 
 tasks.withType(GroovyCompile) {
     sourceCompatibility = "1.8"
@@ -108,7 +108,15 @@ artifacts {
     archives javadocJar
 }
 
-/*
+gradlePlugin {
+    plugins {
+        swagger2MarkupPlugin {
+            id = "io.github.RobWin.swagger2markup"
+            implementationClass = "io.github.swagger2markup.Swagger2MarkupPlugin"
+        }
+    }
+}
+
 pluginBundle {
     website = 'https://github.com/RobWin/swagger2markup-gradle-plugin'
     vcsUrl = 'https://github.com/RobWin/swagger2markup-gradle-plugin'
@@ -117,12 +125,10 @@ pluginBundle {
 
     plugins {
         swagger2MarkupPlugin {
-            id = 'io.github.robwin.swagger2markup'
             displayName = 'Swagger2Markup Gradle plugin'
         }
     }
 }
-*/
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.3.1'
